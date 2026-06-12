@@ -39,34 +39,62 @@ public class RockPaperScissorsGame : MonoBehaviour
 {
     public enum Choice
     {
-        invalid,
-        rock,
-        paper,
-        scissors,
-        lizard,
-        spock
+        invalid = 0,
+        rock = 1,
+        paper = 2,
+        scissors = 3,
+        lizard = 4,
+        spock = 5
     }
 
-    private string[] choices = { "rock", "paper", "scissors", "lizard", "spock" };
-
-    public void RockPaperScissors(string playerChoice)
+    public void Play(int playerChoiceInt)
     {
-        Debug.Log("You chose: " + playerChoice);
+        Play((Choice)playerChoiceInt);
+    }
 
-        string computerChoice = choices[0];
+    public void Play(Choice playerChoice)
+    {
+        if (playerChoice == Choice.invalid)
+        {
+            Debug.LogWarning("Invalid Choice.");
+            return;
+        }
+
+        Debug.Log("You Chose: " + playerChoice);
+
+        Choice computerChoice = (Choice)Random.Range(1, 6);
         Debug.Log("Computer chose: " + computerChoice);
 
-        if (playerChoice == "rock")
+        Debug.Log(DetermineOutcome(playerChoice, computerChoice));
+    }
+    private string DetermineOutcome(Choice player, Choice computer)
+    {
+        if (player == computer)
+            return "It is a tie. Both chose " + player;
+
+        switch (player)
         {
-            Debug.Log("It's a tie! Both chose " + playerChoice);
+            case Choice.rock:
+                if (computer == Choice.scissors || computer == Choice.lizard)
+                    return "Congrats nerd! Rock beats " + computer;
+                break;
+            case Choice.paper:
+                if (computer == Choice.rock || computer == Choice.spock)
+                    return "Congrats nerd! Rock beats " + computer;
+                break;
+            case Choice.scissors:
+                if (computer == Choice.paper || computer == Choice.lizard)
+                    return "Congrats nerd! Rock beats " + computer;
+                break;
+            case Choice.spock:
+                if (computer == Choice.scissors || computer == Choice.rock)
+                    return "Congrats nerd! Rock beats " + computer;
+                break;
+            case Choice.lizard:
+                if (computer == Choice.scissors || computer == Choice.spock)
+                    return "Congrats nerd! Rock beats " + computer;
+                break;
         }
-        else if (playerChoice == "paper")
-        {
-            Debug.Log("You win! " + playerChoice + " beats " + computerChoice);
-        }
-        else
-        {
-            Debug.Log("You lose! " + computerChoice + " beats " + playerChoice);
-        }
+        return "You lost bozo! " + computer + " beats " + player;
     }
 }
